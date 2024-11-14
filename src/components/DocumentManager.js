@@ -5,13 +5,13 @@ import {
   getTargetContent,
 } from "../api/api.js";
 import { navigate, routes } from "../router/router.js";
-// 추가 : breadcrumb 업데이트 기능 추가
 import { updateBreadcrumb } from "./breadcrumb.js";
 import { sidebarButton } from "./Sidebar.js";
 
+// 문서 목록을 가져와 동적 링크 생성
 export const createDocumentsList = async () => {
   try {
-    // 추가 : DOM 요소 존재 여부 검증 로직
+    // 문서 목록을 추가할 ul 요소 찾기
     const documentList = document.getElementById("document-list");
     if (!documentList) {
       console.error("document-list 요소를 찾을 수 없습니다.");
@@ -27,7 +27,7 @@ export const createDocumentsList = async () => {
   }
 };
 
-// 추가 : active 클래스 관리를 위한 새로운 함수
+// 모든 active 클래스 제거 함수
 const removeAllActiveClasses = () => {
   document
     .querySelectorAll(".sidebar__menuWrapper--document")
@@ -36,10 +36,12 @@ const removeAllActiveClasses = () => {
     });
 };
 
+// 문서 생성 및 사이드바에 링크 추가
 export const createDocumentItem = async (doc, parentElement = null) => {
   const path = `/documents/${doc.id}`;
   const initialDocData = await initializeDocumentContent(doc.id);
 
+  // 라우트 등록
   routes.set(path, {
     id: initialDocData.id,
     title: initialDocData.title,
@@ -47,23 +49,14 @@ export const createDocumentItem = async (doc, parentElement = null) => {
     parent: initialDocData.parent,
   });
 
+  // 문서 항목 생성
   const newDocumentItem = document.createElement("li");
   newDocumentItem.classList.add("sidebar__menuWrapper--document");
-  // 수정 : id를 li 태그로 이동
   newDocumentItem.id = `document-container-${doc.id}`;
 
-  // 수정 : HTML 구조 변경 - document-content div 추가
-  newDocumentItem.innerHTML = `
-    <div class="document-content">
-      <a href="#" class="document-link" data-url="doc${doc.id}">
-        ${doc.title}
-      </a>
-      <button class="add-subdoc-btn" data-parent-id="${doc.id}">+</button>
-    </div>
-    <ul class="sub-document-list" style="display: none;"></ul>
-  `;
+  newDocumentItem.innerHTML = sidebarButton(doc.id, doc.title);
 
-  // 수정 : 부모 요소 처리 로직 강화
+  // 부모 요소가 있으면 그 안에, 없으면 document-list에 추가
   if (parentElement) {
     parentElement.appendChild(newDocumentItem);
   } else {
@@ -75,6 +68,7 @@ export const createDocumentItem = async (doc, parentElement = null) => {
     }
   }
 
+  // 하위 문서가 있으면 하위 문서를 재귀적으로 추가
   if (doc.documents && doc.documents.length > 0) {
     const subDocList = newDocumentItem.querySelector(".sub-document-list");
     doc.documents.forEach((subdoc) => {
@@ -82,57 +76,56 @@ export const createDocumentItem = async (doc, parentElement = null) => {
     });
   }
 
-  // 추가 : hover 이벤트 추가
-  newDocumentItem.addEventListener("mouseenter", () => {
-    newDocumentItem.classList.add("hover__document-item");
-  });
+  // // hover 이벤트 추가
+  // newDocumentItem.addEventListener("mouseenter", () => {
+  //   newDocumentItem.classList.add("hover__document-item");
+  // });
 
   // newDocumentItem.addEventListener("mouseleave", () => {
   //   newDocumentItem.classList.remove("hover__document-item");
   // });
 
-  // 수정 : 문서 클릭 이벤트 로직 개선
+  // 문서 클릭 이벤트
   newDocumentItem.addEventListener("click", async (event) => {
-    // 추가 : 하위 문서 클릭 시 이벤트 전파 중단
-    if (event.target.closest(".sub-document-list")) {
-      event.stopPropagation();
-      return;
-    }
-    // 추가 : + 버튼 클릭 시 이벤트 중단
-    if (event.target.closest(".add-subdoc-btn")) return;
+    if (event.target.closest(".add-subdoc-btn")) return; // + 버튼 클릭시 이벤트 중단
 
     event.preventDefault();
 
-    // 추가 : active 클래스 관리
+    // 모든 active 클래스 제거
     removeAllActiveClasses();
-    newDocumentItem.classList.add("acitve__document-item");
+
+    // 현재 클릭된 항목에 active 클래스 추가
+    // newDocumentItem.classList.add("acitve__document-item");
 
     navigate(path);
 
+    // 문서 내용 가져오기
     const docData = await getTargetContent(doc.id);
 
+    // 편집기 영역에 제목과 내용 표시
     const titleElement = document.getElementById("editor__title-input");
     const contentElement = document.getElementById("editor__content-input");
     titleElement.value = docData.title || "";
     contentElement.value = docData.content || "";
 
+    // 편집 가능한 상태로 설정
     titleElement.disabled = false;
     contentElement.disabled = false;
 
-    // 추가 : breadcrumb 업데이트
+    // breadcrumb 업데이트
     await updateBreadcrumb(doc.id);
 
-    // 수정 : 하위 문서 리스트 토글 통합
+    // 하위 문서 리스트 토글
     const subDocumentList = newDocumentItem.querySelector(".sub-document-list");
     subDocumentList.style.display =
       subDocumentList.style.display === "none" ? "block" : "none";
   });
 
-  // 수정 : document 추가 버튼 이벤트 개선
+  // document 추가 버튼 클릭 이벤트
   const addButton = newDocumentItem.querySelector(".add-subdoc-btn");
   if (addButton) {
     addButton.addEventListener("click", async (event) => {
-      event.stopPropagation(); // 추가 : 이벤트 버블링 방지
+      event.stopPropagation(); // 이벤트 버블링 방지
       const parentId = event.target.dataset.parentId;
       if (parentId) {
         await addDoc(parentId);
@@ -141,7 +134,7 @@ export const createDocumentItem = async (doc, parentElement = null) => {
   }
 };
 
-// 수정 : Root Document 생성 함수 개선
+// Root Document 생성
 export const addRootDoc = async () => {
   try {
     const newDocument = await postNewDocument("untitled");
@@ -155,9 +148,8 @@ export const addRootDoc = async () => {
   }
 };
 
-// 수정 : 하위 페이지 생성 함수 개선
+// 하위 페이지 생성
 export const addDoc = async (parentId) => {
-  // 추가 : 부모 요소 검증 강화
   const parentElement = document.getElementById(
     `document-container-${parentId}`
   );
@@ -177,7 +169,7 @@ export const addDoc = async (parentId) => {
     await createDocumentItem(newDocument, subDocumentList);
     navigate(`/documents/${newDocument.id}`);
 
-    // 추가 : 하위 문서 목록 표시 처리
+    // 하위 문서 목록이 숨겨져 있다면 보이게 설정
     if (subDocumentList.style.display === "none") {
       subDocumentList.style.display = "block";
     }
@@ -186,12 +178,12 @@ export const addDoc = async (parentId) => {
   }
 };
 
-// 추가 : 주석 처리된 이벤트 리스너
-// document.addEventListener("DOMContentLoaded", () => {
-//   const createButton = document.getElementById(
-//     "sidebar__createDocument--button"
-//   );
-//   if (createButton) {
-//     createButton.addEventListener("click", addRootDoc);
-//   }
-// });
+// Root Document 생성 버튼에 이벤트 리스너 추가
+document.addEventListener("DOMContentLoaded", () => {
+  const createButton = document.getElementById(
+    "sidebar__createDocument--button"
+  );
+  if (createButton) {
+    createButton.addEventListener("click", addRootDoc);
+  }
+});
