@@ -1,5 +1,6 @@
 import { BASE_URL, x_username } from "../constants/urls.js";
 
+// 루트 문서 목록 가져오는 함수
 export const getRootDocuments = async () => {
   try {
     const response = await fetch(BASE_URL, {
@@ -14,6 +15,7 @@ export const getRootDocuments = async () => {
   }
 };
 
+// 특정 document 하나 가져오는 함수 (document id 필수)
 export const getTargetContent = async (docId) => {
   try {
     const response = await fetch(`${BASE_URL}/${docId}`, {
@@ -28,6 +30,7 @@ export const getTargetContent = async (docId) => {
   }
 };
 
+// 새 document 만드는 함수
 export const postNewDocument = async (title, parentId = null) => {
   try {
     const response = await fetch(BASE_URL, {
@@ -41,7 +44,6 @@ export const postNewDocument = async (title, parentId = null) => {
         parent: parentId,
       }),
     });
-
     if (!response.ok) throw new Error("Document 생성에 실패했습니다.");
     return await response.json();
   } catch (error) {
@@ -49,6 +51,7 @@ export const postNewDocument = async (title, parentId = null) => {
   }
 };
 
+// document 내용 초기화하는 함수
 export const initializeDocumentContent = async (docId) => {
   try {
     const response = await fetch(`${BASE_URL}/${docId}`, {
@@ -65,6 +68,7 @@ export const initializeDocumentContent = async (docId) => {
   }
 };
 
+// 자동저장하는 함수(디바운싱)
 export const AutoSave = async (docId, title, content) => {
   try {
     const response = await fetch(`${BASE_URL}/${docId}`, {
@@ -75,7 +79,6 @@ export const AutoSave = async (docId, title, content) => {
       },
       body: JSON.stringify({ title, content }),
     });
-
     if (!response.ok) throw new Error("document 수정 실패");
 
     const savedDoc = await response.json();
