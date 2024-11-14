@@ -1,8 +1,9 @@
-import { createDocumentsList } from "./components/DocumentManager.js";
+import { createDocumentsList } from "./components/documentManager/CreateDocumentList.js";
 import { initializeEditor } from "./components/Editor.js";
 import { setEventListener } from "./listeners/CreateNewDocListener.js";
 import { router } from "./router/router.js";
 import { initializeBreadcrumb } from "./components/breadcrumb.js";
+import { deleteBtnHandler } from "./components/HandleDeleteButton.js";
 
 // 문서 목록 불러오기 및 초기화
 document.addEventListener("DOMContentLoaded", () => {

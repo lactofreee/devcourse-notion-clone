@@ -1,5 +1,12 @@
-export const onDeleteButtonClick = () => {
-  const deleteDocButton = document.getElementById("breadCrumb__deleteButton");
-  console.log("cliked");
-  deleteDocButton.addEventListener("click", onDeleteButtonClick);
+export const deleteBtnHandler = () => {
+  const deleteBtn = document.getElementById("breadCrumb__deleteButton");
+  const currentDocId = window.location.pathname;
+  const onDeleteBynClick = (DocId) => {
+    console.log(DocId);
+  };
+  deleteBtn.addEventListener("click", () => {
+    onDeleteBynClick(currentDocId);
+  });
 };
+
+deleteBtnHandler();
