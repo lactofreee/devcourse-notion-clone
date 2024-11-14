@@ -1,2 +1,2 @@
-export const BASE_URL = `https://kdt-api.fe.dev-cos.com/documents`
-export const x_username = 'teamouse10101'
+export const BASE_URL = `https://kdt-api.fe.dev-cos.com/documents`;
+export const x_username = "test999";
