@@ -5,9 +5,7 @@ import {
   getTargetContent,
 } from "../api/api.js";
 import { navigate, routes } from "../router/router.js";
-// 추가 : breadcrumb 업데이트 기능 추가
 import { updateBreadcrumb } from "./breadcrumb.js";
-import { sidebarButton } from "./Sidebar.js";
 
 export const createDocumentsList = async () => {
   try {
@@ -87,19 +85,13 @@ export const createDocumentItem = async (doc, parentElement = null) => {
     newDocumentItem.classList.add("hover__document-item");
   });
 
-  // newDocumentItem.addEventListener("mouseleave", () => {
-  //   newDocumentItem.classList.remove("hover__document-item");
-  // });
+  newDocumentItem.addEventListener("mouseleave", () => {
+    newDocumentItem.classList.remove("hover__document-item");
+  });
 
   // 수정 : 문서 클릭 이벤트 로직 개선
   newDocumentItem.addEventListener("click", async (event) => {
-    // 추가 : 하위 문서 클릭 시 이벤트 전파 중단
-    if (event.target.closest(".sub-document-list")) {
-      event.stopPropagation();
-      return;
-    }
-    // 추가 : + 버튼 클릭 시 이벤트 중단
-    if (event.target.closest(".add-subdoc-btn")) return;
+    if (event.target.closest(".add-subdoc-btn")) return; // + 버튼 클릭시 이벤트 중단
 
     event.preventDefault();
 
@@ -185,3 +177,13 @@ export const addDoc = async (parentId) => {
     console.error("하위 페이지 생성 실패:", error);
   }
 };
+
+// Root Document 생성 버튼에 이벤트 리스너 추가
+document.addEventListener("DOMContentLoaded", () => {
+  const createButton = document.getElementById(
+    "sidebar__createDocument--button"
+  );
+  if (createButton) {
+    createButton.addEventListener("click", addRootDoc);
+  }
+});
