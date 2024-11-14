@@ -26,4 +26,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // breadcrumb 초기화
   initializeBreadcrumb();
+  han
 });

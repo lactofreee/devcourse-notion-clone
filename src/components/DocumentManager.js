@@ -177,13 +177,3 @@ export const addDoc = async (parentId) => {
     console.error("하위 페이지 생성 실패:", error);
   }
 };
-
-// Root Document 생성 버튼에 이벤트 리스너 추가
-document.addEventListener("DOMContentLoaded", () => {
-  const createButton = document.getElementById(
-    "sidebar__createDocument--button"
-  );
-  if (createButton) {
-    createButton.addEventListener("click", addRootDoc);
-  }
-});
