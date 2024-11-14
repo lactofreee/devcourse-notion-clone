@@ -1,5 +1,32 @@
 const hamburger = document.getElementById("sideBar__hamburger");
 const sideBar = document.getElementById("sidebar");
+const mainSection = document.getElementById("mainSection");
+
+export const sidebarButton = (id, title) => {
+  return `
+    <div class="sidebar_item" id="documentBlock-div-sidebar-${id}">
+      <div class="sidebar_item_left_btn" >
+        <button class="document-spread sidebar_item-btn">
+          <img
+          src="/src/asset/sideBar-item-hide.svg"
+          alt="sidebar-button"
+          class="sidebar__icon"
+          />
+        </button>
+        <a href="#" class="document-link " data-url="doc${id}">
+        ${title}
+        </a>
+      </div>
+      <button class="add-subdoc-btn sidebar_item-btn" data-parent-id="${id}">
+        <img
+          src="/src/asset/plus.svg"
+          alt="sidebar-button"
+          class="sidebar__icon"
+        />
+      </button>
+    </div>
+    <ul class="sub-document-list" style="display: none;"></ul> <!-- 기본적으로 숨기기 -->`;
+};
 
 // 사이드바 숨기는 함수
 const onclickSideBarHide = () => {
@@ -7,7 +34,7 @@ const onclickSideBarHide = () => {
 
   hideButton.addEventListener("click", () => {
     sideBar.classList.add("sidebar__hide");
-
+    mainSection.classList.toggle("margin-left250");
     hamburger.style.display = "block";
   });
 };
@@ -47,6 +74,7 @@ const HamburgerHandler = () => {
     clearTimeout(hoverTimer); // 타이머 초기화
     sideBar.classList.remove("sidebar__hide");
     sideBar.classList.remove("screen_miniSidebar");
+    mainSection.classList.toggle("margin-left250");
     hamburger.style.display = "none";
   });
 
