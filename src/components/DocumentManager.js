@@ -7,6 +7,7 @@ import {
 import { navigate, routes } from "../router/router.js";
 // 추가 : breadcrumb 업데이트 기능 추가
 import { updateBreadcrumb } from "./breadcrumb.js";
+import { sidebarButton } from "./Sidebar.js";
 
 export const createDocumentsList = async () => {
   try {
@@ -86,9 +87,9 @@ export const createDocumentItem = async (doc, parentElement = null) => {
     newDocumentItem.classList.add("hover__document-item");
   });
 
-  newDocumentItem.addEventListener("mouseleave", () => {
-    newDocumentItem.classList.remove("hover__document-item");
-  });
+  // newDocumentItem.addEventListener("mouseleave", () => {
+  //   newDocumentItem.classList.remove("hover__document-item");
+  // });
 
   // 수정 : 문서 클릭 이벤트 로직 개선
   newDocumentItem.addEventListener("click", async (event) => {
