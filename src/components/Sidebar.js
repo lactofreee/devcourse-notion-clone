@@ -1,5 +1,6 @@
 const hamburger = document.getElementById("sideBar__hamburger");
 const sideBar = document.getElementById("sidebar");
+const mainSection = document.getElementById("mainSection");
 
 export const sidebarButton = (id, title) => {
   return `
@@ -7,7 +8,7 @@ export const sidebarButton = (id, title) => {
       <div class="sidebar_item_left_btn" >
         <button class="document-spread sidebar_item-btn">
           <img
-          src="./src/asset/sideBar-item-hide.svg"
+          src="/src/asset/sideBar-item-hide.svg"
           alt="sidebar-button"
           class="sidebar__icon"
           />
@@ -18,7 +19,7 @@ export const sidebarButton = (id, title) => {
       </div>
       <button class="add-subdoc-btn sidebar_item-btn" data-parent-id="${id}">
         <img
-          src="./src/asset/plus.svg"
+          src="/src/asset/plus.svg"
           alt="sidebar-button"
           class="sidebar__icon"
         />
@@ -33,7 +34,7 @@ const onclickSideBarHide = () => {
 
   hideButton.addEventListener("click", () => {
     sideBar.classList.add("sidebar__hide");
-
+    mainSection.classList.toggle("margin-left250");
     hamburger.style.display = "block";
   });
 };
@@ -73,6 +74,7 @@ const HamburgerHandler = () => {
     clearTimeout(hoverTimer); // 타이머 초기화
     sideBar.classList.remove("sidebar__hide");
     sideBar.classList.remove("screen_miniSidebar");
+    mainSection.classList.toggle("margin-left250");
     hamburger.style.display = "none";
   });
 
