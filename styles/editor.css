@@ -2,17 +2,17 @@
 
 .editor {
   height: 100%;
-  padding-top: 105px;
-  padding-inline: 110px;
+  padding-top: 50px;
   display: flex;
   justify-content: center;
   color: var(--black300);
 }
 .editor__body {
-  width: 100%;
+  width: 708px;
+  height: fit-content;
 }
 
-.editor h1 {
+.editor__title {
   font-size: 2.28rem;
   font-weight: bolder;
   padding: 2px 4px;
@@ -24,7 +24,15 @@
   font-weight: inherit;
 }
 
-.editor textarea {
+.editor_content {
+  box-sizing: border-box;
+  height: 400px;
   font-size: 1.14rem;
   padding: 2px 4px;
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+}
+
+.editor_content:-webkit-scrollbar {
+  display: none;
 }

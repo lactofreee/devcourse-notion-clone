@@ -1,17 +1,32 @@
 @import url("/styles/variables.css");
 
 .screen__pageView {
-  flex: 1; /* 남은 공간 모두 차지 */
   display: flex;
   flex-direction: column;
+  width: 100%;
+  margin-left: 240px;
+  transition: margin-left 0.3s ease;
 }
 .pageView__breadCrumbs {
   height: 44px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 14px;
+  padding: 14px;
 }
-.margin-left250 {
-  margin-left: 250px;
+.screen__pageView--slide {
+  margin-left: 46px;
+}
+.hamburger__icon {
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+.hamburger__wrap {
+  position: fixed;
+  padding: 14px;
 }

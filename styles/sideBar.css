@@ -2,18 +2,25 @@
 
 .screen__sidebar {
   box-sizing: border-box;
-  min-width: 250px;
+  min-width: 240px;
   background-color: var(--gray100);
-  padding-inline: 8px;
+  padding: 0 8px 8px;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
   max-height: 100vh;
+  min-height: 100vh;
   overflow-y: scroll;
   position: fixed;
-  /* transform: translateX(0);
-  transition: transform 0.3s ease; */
-  min-height: 100vh;
+
+  transform: translateX(0);
+  transition: transform 0.3s ease, width 0.3s ease;
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+}
+/* ( 크롬, 사파리, 오페라, 엣지 ) 동작 */
+.screen__sidebar:-webkit-scrollbar {
+  display: none;
 }
 .screen_miniSidebar {
   position: absolute;
@@ -28,17 +35,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 44px;
-  padding: 0.86rem 1rem;
+  min-height: 44px;
+  padding: 0 8px;
+  cursor: pointer;
+}
+.sidebar__pageTitle:hover {
+  background-color: var(--bg100);
+  border-radius: 4px;
 }
 .sidebar__titleContainer {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  box-sizing: content-box;
+  align-items: center;
 }
 .space_name {
-  padding-top: 0.4rem;
 }
 .sidebar__menuWrapper {
   display: flex;
@@ -61,27 +72,38 @@
   margin-bottom: 5px;
 }
 
-/* 사이드 바 내부 document list의 item에 적용할 스타일 */
-.document-content,
 .sidebar__menuWrapper--document {
-  border-radius: 4px;
-  display: block;
-  padding: 5px 8px;
-  position: relative;
 }
+
+.document-content {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.document-content:hover {
+  border-radius: 4px;
+  background-color: var(--bg100);
+}
+.document-content:hover .add-subdoc-btn {
+  opacity: 1;
+}
+.document-content--wrap {
+  display: flex;
+  align-items: center;
+}
+
 .add-subdoc-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 4px;
   background-color: transparent;
   border: none;
-  opacity: 0;
-  visibility: hidden;
   border-radius: 3px;
   padding: 1px 6px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  opacity: 0;
+  transition: opacity 0.2s ease;
   font-size: 1.2rem;
   color: var(--black200);
 }
@@ -123,9 +145,11 @@
   height: 20px;
   padding: 0;
   border: none;
-
   background: none;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .sideBar__button:hover {
   background-color: var(--bg100);
@@ -143,14 +167,35 @@
 }
 /* 사이드바 숨기기 css */
 .sidebar__hide {
-  min-width: 0px;
   width: 0px;
   padding: 0px;
-  transform: translateX(-250px);
-  display: none;
+  transform: translateX(-100%);
 }
-
-.document-link {
-  display: inline-block;
-  width: 100%;
+.subDoc__button {
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+}
+.subDoc__button--rotate {
+  transform: rotate(90deg);
+}
+.subDoc__button:hover {
+  background-color: var(--bg100);
+  border-radius: 4px;
+}
+.emptyBox {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  height: 30px;
+  color: #d3d1cb;
 }

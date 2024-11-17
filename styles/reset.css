@@ -138,6 +138,7 @@ body {
   background-color: var(--white);
   color: var(--black300);
   display: flex;
+  box-sizing: border-box;
 }
 
 textarea {

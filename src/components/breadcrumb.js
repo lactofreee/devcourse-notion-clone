@@ -1,11 +1,12 @@
-import { getTargetContent } from "../api/api.js";
+import { getTargetContent, deleteDocument } from "../api/api.js";
 import { navigate } from "../router/router.js";
+import { goToHome, createDocumentsList } from "./DocumentManager.js";
 
 // breadcrumb 업데이트 함수
 export const updateBreadcrumb = async (docId) => {
   const breadcrumb = document.getElementById("breadCrumb");
   if (!breadcrumb || !docId) {
-    breadcrumb.innerHTML = '문서';
+    breadcrumb.innerHTML = "문서";
     return;
   }
 
@@ -24,11 +25,11 @@ export const updateBreadcrumb = async (docId) => {
           ${currentParent.title}
         </span>
       `);
-      
+
       if (currentParent.parent) {
         currentParent = await getTargetContent(currentParent.parent);
         if (currentParent) {
-          breadcrumbParts.unshift(' / ');
+          breadcrumbParts.unshift(" / ");
         }
       } else {
         break;
@@ -39,27 +40,25 @@ export const updateBreadcrumb = async (docId) => {
     breadcrumbParts.unshift(`
       <span class="breadcrumb-item" data-document-id="root">
         문서
-      </span> / `
-    );
+      </span> / `);
 
-    breadcrumb.innerHTML = breadcrumbParts.join('');
+    breadcrumb.innerHTML = breadcrumbParts.join("");
     addBreadcrumbClickEvents();
-
   } catch (error) {
-    console.error('Breadcrumb 업데이트 실패:', error);
-    breadcrumb.innerHTML = '문서';
+    console.error("Breadcrumb 업데이트 실패:", error);
+    breadcrumb.innerHTML = "문서";
   }
 };
 
 // breadcrumb 클릭 이벤트 추가
 const addBreadcrumbClickEvents = () => {
-  document.querySelectorAll('.breadcrumb-item').forEach(item => {
-    item.addEventListener('click', (e) => {
+  document.querySelectorAll(".breadcrumb-item").forEach((item) => {
+    item.addEventListener("click", (e) => {
       const docId = e.target.dataset.documentId;
-      if (docId && docId !== 'root') {
+      if (docId && docId !== "root") {
         navigate(`/documents/${docId}`);
       } else {
-        navigate('/documents');
+        navigate("/documents");
       }
     });
   });
@@ -68,16 +67,25 @@ const addBreadcrumbClickEvents = () => {
 // 초기화 함수
 export const initializeBreadcrumb = () => {
   const currentPath = window.location.pathname;
-  const docId = currentPath.split('/documents/')[1];
-  
-  if (currentPath === '/documents') {
+  const docId = currentPath.split("/documents/")[1];
+
+  if (currentPath === "/documents") {
     // 랜딩 페이지인 경우
     const breadcrumb = document.getElementById("breadCrumb");
     if (breadcrumb) {
-      breadcrumb.innerHTML = '문서';
+      breadcrumb.innerHTML = "문서";
     }
   } else if (docId) {
     // 특정 문서 페이지인 경우
     updateBreadcrumb(docId);
   }
 };
+// 삭제 버튼 구현
+const documentList = document.getElementById("sidebar__menuWrapper");
+document.querySelector("#trashIcon").addEventListener("click", async () => {
+  const documentId = window.location.pathname.split("/documents/")[1];
+  await deleteDocument(documentId);
+  documentList.innerHTML = "";
+  await createDocumentsList();
+  goToHome();
+});

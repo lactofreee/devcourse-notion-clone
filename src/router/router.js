@@ -1,13 +1,13 @@
 export const routes = new Map();
 
-// 기본 라우트 설정
-routes.set("/", {
-  title: "Home",
-  content: "Welcome to the Home Page",
-});
+// // 기본 라우트 설정
+// routes.set("/", {
+//   title: "Home",
+//   content: "Welcome to the Home Page",
+// });
 
 // 문서 랜딩 페이지 라우트 설정
-routes.set("/documents", {
+routes.set("/", {
   title: "🧀 도시쥐와 시골쥐의 space",
   content: `1. side-bar 숨기기
 좌상단의 space-name에 hover할 때 side-bar를 숨길 수 있는 버튼이 표시됩니다. 클릭하면 editor 영역을 확장하여 전체 보기를 제공합니다.
@@ -46,10 +46,10 @@ export const router = () => {
   const titleElement = document.getElementById("editor__title-input");
   const contentElement = document.getElementById("editor__content-input");
 
-  if (!titleElement || !contentElement) return;
+  // if (!titleElement || !contentElement) return;
 
-  titleElement.disabled = !!pageData.disabled;
-  contentElement.disabled = !!pageData.disabled;
+  // titleElement.disabled = !!pageData.disabled;
+  // contentElement.disabled = !!pageData.disabled;
 
   titleElement.value = pageData.title || "";
   contentElement.value = pageData.content || "";
@@ -58,22 +58,22 @@ export const router = () => {
 export const navigate = (path) => {
   path = decodeURIComponent(path);
   window.history.pushState({}, path, window.location.origin + path);
-  router();
+  // router();
 };
 
-// popstate 이벤트 리스너
-window.addEventListener("popstate", router);
+// // popstate 이벤트 리스너
+// window.addEventListener("popstate", router);
 
-// 초기 라우팅
-window.addEventListener("DOMContentLoaded", () => {
-  // 랜딩 페이지 링크에 클릭 이벤트 추가
-  const landingLink = document.querySelector('a[href="/documents"]');
-  if (landingLink) {
-    landingLink.addEventListener("click", (e) => {
-      e.preventDefault();
-      navigate("/documents");
-    });
-  }
+// // 초기 라우팅
+// window.addEventListener("DOMContentLoaded", () => {
+//   // 랜딩 페이지 링크에 클릭 이벤트 추가
+//   const landingLink = document.querySelector('a[href="/documents"]');
+//   if (landingLink) {
+//     landingLink.addEventListener("click", (e) => {
+//       e.preventDefault();
+//       navigate("/documents");
+//     });
+//   }
 
-  router();
-});
+//   router();
+// });

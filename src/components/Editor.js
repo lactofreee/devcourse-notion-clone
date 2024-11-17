@@ -13,54 +13,67 @@ const debounceSave = async (docId, title, content) => {
 };
 
 export const initializeEditor = async () => {
-  const documentId = window.location.pathname.split("/documents/")[1];
-  if (!documentId) return;
+  // console.log(window.location.pathname);
+  // if (!documentId) return;
 
   const titleElement = document.getElementById("editor__title-input");
   const contentElement = document.getElementById("editor__content-input");
 
-  if (!titleElement || !contentElement) return;
+  // if (!titleElement || !contentElement) return;
 
-  const document = await getTargetContent(documentId);
+  // const document = await getTargetContent(documentId);
 
-  titleElement.value = document?.title || "";
-  contentElement.value = document?.content || "";
+  // titleElement.value = document?.title || "";
+  // contentElement.value = document?.content || "";
 
-  titleElement.addEventListener("input", () => {
+  titleElement.addEventListener("keyup", (event) => {
+    const documentId = window.location.pathname.split("/documents/")[1];
+    const anchorElement = document.querySelector(
+      `a[data-url="doc${documentId}"]`
+    );
+    anchorElement.textContent = event.currentTarget.value;
     debounceSave(documentId, titleElement.value, contentElement.value);
   });
 
-  contentElement.addEventListener("input", () => {
+  contentElement.addEventListener("keyup", () => {
+    const documentId = window.location.pathname.split("/documents/")[1];
     debounceSave(documentId, titleElement.value, contentElement.value);
   });
 };
 
-// 11.14 수정
-export const tempF = async () => {
-  const documentList1 = document.querySelectorAll("#document-list li");
-  documentList1.forEach((item) => {
-    item.addEventListener("click", async () => {
-      console.log(item.dataset.id);
-      const temp = await getTargetContent(item.dataset.id);
-      const title = document.querySelector(
-        `#editor__title-input[data-id="${item.dataset.id}"]`
-      );
-      console.log(title);
-      const content = document.querySelector(
-        `#editor__content-input[data-id="${item.dataset.id}"]`
-      );
-      // 제목그리기
-      title.addEventListener("keyup", async (e) => {
-        console.log(e.currentTarget.value);
-        await editF(item.dataset.id, e.currentTarget.value, temp.content);
-        // const titleSide = document.querySelector(
-        //   `#document-container-${item.dataset.id} div a`
-        // );
-        // console.log("title", titleSide);
-      });
-      content.addEventListener("keyup", async (e) => {
-        await editF(item.dataset.id, temp.title, e.currentTarget.value);
-      });
-    });
-  });
-};
+// // 11.14 수정
+// export const tempF = async () => {
+//   const documentList1 = document.querySelectorAll("#document-list li");
+//   documentList1.forEach((item) => {
+//     item.addEventListener("click", async () => {
+//       // console.log(item.dataset.id);
+//       const temp = await getTargetContent(item.dataset.id);
+//       const title = document.querySelector(
+//         `#editor__title-input[data-id="${item.dataset.id}"]`
+//       );
+//       // console.log(title);
+//       const content = document.querySelector(
+//         `#editor__content-input[data-id="${item.dataset.id}"]`
+//       );
+//       // 제목그리기
+//       title.addEventListener("keyup", async (e) => {
+//         // console.log(e.currentTarget.value);
+//         await editF(item.dataset.id, e.currentTarget.value, temp.content);
+//         // const titleSide = document.querySelector(
+//         //   `#document-container-${item.dataset.id} div a`
+//         // );
+//         // console.log("title", titleSide);
+//       });
+//       content.addEventListener("keyup", async (e) => {
+//         await editF(item.dataset.id, temp.title, e.currentTarget.value);
+//       });
+//     });
+//   });
+// };
+
+const textarea = document.getElementById("editor__content-input");
+
+textarea.addEventListener("input", () => {
+  textarea.style.height = "auto"; // 기존 높이 초기화
+  textarea.style.height = `${textarea.scrollHeight}px`; // 내용에 맞게 높이 설정
+});

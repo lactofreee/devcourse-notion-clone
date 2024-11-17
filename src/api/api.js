@@ -118,3 +118,18 @@ export const AutoSave = async (docId, title, content) => {
     console.error("Document 수정 실패:", error);
   }
 };
+
+export const deleteDocument = async (docId) => {
+  try {
+    const response = await fetch(`${BASE_URL}/${docId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "x-username": x_username,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Document 초기화 중 오류 발생:", error);
+  }
+};
